@@ -1,5 +1,6 @@
 import math
 import matplotlib.pyplot as plt
+import random
 
 def read_tsp_data(filename):
     tsp_data = {}
@@ -49,7 +50,7 @@ def greedy_tsp(tsp_data):
     Greedy algorithm for the Traveling Salesman Problem.
     """
     # Start from the first point
-    current_point = list(tsp_data.keys())[0]
+    current_point = random.choice(list(tsp_data.keys()))
     tour = [current_point]
     remaining_points = set(tsp_data.keys())
     remaining_points.remove(current_point)
