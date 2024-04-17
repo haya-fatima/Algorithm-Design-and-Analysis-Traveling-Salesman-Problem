@@ -1,6 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import random
+from PIL import Image, ImageDraw
 
 def read_tsp_data(filename):
     tsp_data = {}
@@ -19,25 +20,33 @@ def read_tsp_data(filename):
     # print(tsp_data)
     return tsp_data
 
-def plot_tour(solution, tsp_data):
+def plot_tour(solution, tsp_data, image_size=(800, 600), line_color=(0, 0, 255), point_color=(255, 0, 0)):
     # Extract x and y coordinates from tsp_data
     x = [tsp_data[point][0] for point in solution]
     y = [tsp_data[point][1] for point in solution]
 
-    # Connect the points in the order specified by the solution
-    x.append(x[0])  # Closing the loop
-    y.append(y[0])  # Closing the loop
+    # Scale coordinates to fit within image_size
+    min_x, max_x = min(x), max(x)
+    min_y, max_y = min(y), max(y)
+    scale_x = image_size[0] / (max_x - min_x)
+    scale_y = image_size[1] / (max_y - min_y)
+    x = [(val - min_x) * scale_x for val in x]
+    y = [(val - min_y) * scale_y for val in y]
 
-    # Plot the tour
-    plt.plot(x, y, marker='o')
+    # Create a blank image
+    img = Image.new("RGB", image_size, "white")
+    draw = ImageDraw.Draw(img)
 
-    # Add labels and title
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.title('Optimal Tour')
+    # Draw the tour as lines
+    for i in range(len(x) - 1):
+        draw.line((x[i], y[i], x[i + 1], y[i + 1]), fill=line_color)
+
+    # Draw points
+    for i in range(len(x)):
+        draw.ellipse((x[i] - 3, y[i] - 3, x[i] + 3, y[i] + 3), fill=point_color)
 
     # Show plot
-    plt.show()
+    img.show()
     
 def euclidean_distance(point1, point2):
     """
