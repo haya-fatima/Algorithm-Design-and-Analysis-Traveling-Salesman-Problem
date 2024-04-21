@@ -1,0 +1,19 @@
+NAME : sample11
+COMMENT : Sample dataset with 11 nodes
+COMMENT : Derived from Zainab
+TYPE : TSP
+DIMENSION : 11
+EDGE_WEIGHT_TYPE : EUC_2D
+NODE_COORD_SECTION
+1 34 56
+2 78 23
+3 45 87
+4 12 90
+5 67 45
+6 98 32
+7 54 76
+8 21 65
+9 87 43
+10 32 10
+11 65 98
+EOF

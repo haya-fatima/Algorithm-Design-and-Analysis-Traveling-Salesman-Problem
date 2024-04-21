@@ -35,23 +35,21 @@ def total_distance(tour, tsp_data):
     dist += euclidean_distance(tsp_data[tour[-1]], tsp_data[tour[0]])  # Complete the tour
     return dist
 
-def brute_force_tsp(tsp_data):
-    """
-    Brute force algorithm for the Traveling Salesman Problem.
-    """
-    # Generate all possible permutations of points
-    all_permutations = itertools.permutations(tsp_data.keys())
-
-    # Find the permutation with the minimum total distance
+def brute_force(tsp_data):
+    cities = list(tsp_data.keys())
     min_distance = float('inf')
-    optimal_tour = None
-    for perm in all_permutations:
-        dist = total_distance(perm, tsp_data)
-        if dist < min_distance:
-            min_distance = dist
-            optimal_tour = perm
-    
-    return optimal_tour, min_distance
+    min_path = None
+
+    # Generate all permutations of cities
+    for perm in itertools.permutations(cities):
+        perm_with_start = perm + (perm[0],)  # Append the starting node to the end of the permutation
+        d = total_distance(perm_with_start, tsp_data)
+        print(d, perm_with_start)
+        if d < min_distance:
+            min_distance = d
+            min_path = perm_with_start
+
+    return min_path, min_distance
 
 def plot_tour(solution, tsp_data, image_size=(800, 600), line_color=(0, 0, 255), point_color=(255, 0, 0)):
     # Extract x and y coordinates from tsp_data
@@ -82,10 +80,10 @@ def plot_tour(solution, tsp_data, image_size=(800, 600), line_color=(0, 0, 255),
     img.show()
 
 if __name__ == "__main__":
-    filename = "datasets/wi29.tsp"
+    filename = "datasets/s10.tsp"
     tsp_data = read_tsp_data(filename)
 
-    optimal_tour, distance = brute_force_tsp(tsp_data)
+    optimal_tour, distance = brute_force(tsp_data)
     print("Optimal Tour:", optimal_tour)
     print("Total Distance:", distance)
 

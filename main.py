@@ -18,7 +18,7 @@ def plot_tour(solution, tsp_data, image_size=(800, 600), line_color=(0, 0, 255),
     y = [(val - min_y) * scale_y for val in y]
 
     # Create a blank image
-    img = Image.new("RGB", image_size, "white")
+    img = Image.new("RGB", (image_size[0]+30,image_size[1]+30), "white")
     draw = ImageDraw.Draw(img)
 
     # Draw the tour as lines
@@ -28,11 +28,12 @@ def plot_tour(solution, tsp_data, image_size=(800, 600), line_color=(0, 0, 255),
     # Draw points
     for i in range(len(x)):
         draw.ellipse((x[i] - 3, y[i] - 3, x[i] + 3, y[i] + 3), fill=point_color)
+        draw.text((x[i] + 5, y[i] + 5), str(solution[i]), fill=(0, 0, 0))
 
     # Show plot
     img.show()
 
-filename = r"datasets\smol.tsp"
+filename = r"datasets\s4.tsp"
 tsp_data = read_tsp_data(filename)
 
 optimal_tour, distance = greedy_tsp(tsp_data)
