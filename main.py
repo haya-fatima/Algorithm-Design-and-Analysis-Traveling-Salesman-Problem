@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
+import time
 from PIL import Image, ImageDraw
 from dynamicTSP import *
 from greedyTSP import *
+from bruteTSP import *
 from readData import *
 
 def plot_tour(solution, tsp_data, image_size=(800, 600), line_color=(0, 0, 255), point_color=(255, 0, 0)):
@@ -33,11 +35,52 @@ def plot_tour(solution, tsp_data, image_size=(800, 600), line_color=(0, 0, 255),
     # Show plot
     img.show()
 
-filename = r"datasets\s4.tsp"
-tsp_data = read_tsp_data(filename)
+# filename = r"datasets\s4.tsp"
+# tsp_data = read_tsp_data(filename)
 
-optimal_tour, distance = greedy_tsp(tsp_data)
-print("Optimal Tour:", optimal_tour)
-print("Total Distance:", distance)
+# optimal_tour, distance = greedy_tsp(tsp_data)
+# print("Optimal Tour:", optimal_tour)
+# print("Total Distance:", distance)
 
-plot_tour(optimal_tour, tsp_data)
+# plot_tour(optimal_tour, tsp_data)
+
+# runtime_data = [[" ", "Dynamic Programming", "Greedy", "Brute Force"]]
+runtime_data = []
+
+def populate_string(time, dis):
+    s = ""
+    s += str(round(time,3))
+    s += ":"
+    s += str(round(dis,2))
+    return s
+
+for i in range(13, 15):
+    filename = f"datasets/s{i}.tsp"
+    tsp_data = read_tsp_data(filename)
+    
+    start_time_dp = time.time()
+    optimal_tour_dp, distance_dp = dp_tsp(tsp_data)
+    end_time_dp = time.time()
+    elapsed_time_dp = end_time_dp - start_time_dp
+    sd = populate_string(distance_dp, elapsed_time_dp)
+    
+    start_time_gr = time.time()
+    optimal_tour_gr, distance_gr = greedy_tsp(tsp_data)
+    end_time_gr = time.time()
+    elapsed_time_gr = end_time_gr - start_time_gr
+    sg = populate_string(distance_gr, elapsed_time_gr)
+    
+    start_time_bf = time.time()
+    optimal_tour_bf, distance_bf = bf_tsp(tsp_data)
+    end_time_bf = time.time()
+    elapsed_time_bf = end_time_bf - start_time_bf
+    sb = populate_string(distance_bf, elapsed_time_bf)
+    
+    runtime_data.append([f"s{i}", sd, sg, sb])
+
+column_widths = [max(len(cell) for cell in column) for column in zip(*runtime_data)]
+
+with open("runtimes.txt", "a+") as file:
+    # Write the table to the file
+    for row in runtime_data:
+        file.write("|".join(cell.ljust(width) for cell, width in zip(row, column_widths)) + "\n")
