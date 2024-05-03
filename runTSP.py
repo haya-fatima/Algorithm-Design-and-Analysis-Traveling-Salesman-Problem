@@ -29,7 +29,7 @@ def read_tsp_data(filename):
 filename = "qa194.tsp"
 tsp_data = read_tsp_data(filename)
 
-ea = TSP_EA(population_size= POPULATION_SIZE, generations= GENERATIONS, mutation_rate= MUTATION_RATE, offsprings= OFFSPRINGS, replacement=0, elite=1)
+ea = TSP_EA(population_size= POPULATION_SIZE, generations= GENERATIONS, mutation_rate= MUTATION_RATE, offsprings= OFFSPRINGS, replacement=0, elite=0)
 
 # Initialize and run evolutionary algorithm
 avg_BSF = [0 for _ in range(GENERATIONS)]
